@@ -1,9 +1,17 @@
 import { createStore, combineReducers } from "redux";
-import { contacts } from "./phonebook/contacts-reducer";
+import contacts from "./phonebook/contacts-reducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-const rootReducer = combineReducers({
-  contacts,
-});
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-export const store = createStore(rootReducer, composeWithDevTools());
+const persistConfig = {
+  key: "contacts",
+  storage,
+  blacklist: ["filter"],
+};
+
+const persistedReducer = persistReducer(persistConfig, contacts);
+
+export const store = createStore(persistedReducer, composeWithDevTools());
+export const persistor = persistStore(store);

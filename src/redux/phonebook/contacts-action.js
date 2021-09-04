@@ -12,7 +12,7 @@ export const addItem = (item) => {
 };
 export const deleteItem = (itemId) => {
   return {
-    type: actionType.add,
+    type: actionType.delete,
     payload: itemId,
   };
 };

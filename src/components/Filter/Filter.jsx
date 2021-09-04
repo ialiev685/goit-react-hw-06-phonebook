@@ -1,5 +1,7 @@
 import "./Filter.scss";
 import PropTypes from "prop-types";
+import * as actions from "../../redux/phonebook/contacts-action";
+import { connect } from "react-redux";
 
 const Filter = ({ filter, onChange }) => {
   return (
@@ -21,4 +23,12 @@ Filter.propTypes = {
   filter: PropTypes.string,
 };
 
-export default Filter;
+const mapStateToProps = (state) => ({
+  filter: state.filter,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onChange: (e) => dispatch(actions.getFilterItems(e.target.value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
