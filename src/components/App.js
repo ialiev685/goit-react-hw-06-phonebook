@@ -1,6 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../redux/phonebook/contacts-action.js";
+import { getFilterContacts } from "../redux/phonebook/contacts-selector";
 
 import ContactForm from "./ContactForm";
 import ContactsList from "./ContactsList";
@@ -8,7 +10,13 @@ import Section from "./Section";
 import Filter from "./Filter";
 import "./App.scss";
 
-const App = ({ items, addItem, deleteItem }) => {
+const App = () => {
+  const items = useSelector(getFilterContacts);
+  const dispatch = useDispatch();
+
+  const addItem = (newItem) => dispatch(actions.addItem(newItem));
+  const deleteItem = (id) => dispatch(actions.deleteItem(id));
+
   const addContact = (newItem) => {
     if (checkDoubleName(newItem)) {
       alert(`${newItem.name} уже есть в контактах.`);
@@ -37,21 +45,22 @@ const App = ({ items, addItem, deleteItem }) => {
   );
 };
 
-const getFilterContacts = (items, filter) => {
-  const normalizedFilter = filter.toLowerCase();
+// const getFilterContacts = (items, filter) => {
+//   const normalizedFilter = filter.toLowerCase();
 
-  return items.filter(({ name }) =>
-    name.toLowerCase().includes(normalizedFilter)
-  );
-};
+//   return items.filter(({ name }) =>
+//     name.toLowerCase().includes(normalizedFilter)
+//   );
+// };
 
-const mapStateToProps = ({ contacts: { items, filter } }) => ({
-  items: getFilterContacts(items, filter),
-});
+// const mapStateToProps = ({ contacts: { items, filter } }) => ({
+//   items: getFilterContacts(items, filter),
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  addItem: (item) => dispatch(actions.addItem(item)),
-  deleteItem: (item) => dispatch(actions.deleteItem(item)),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   addItem: (item) => dispatch(actions.addItem(item)),
+//   deleteItem: (item) => dispatch(actions.deleteItem(item)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default App;
