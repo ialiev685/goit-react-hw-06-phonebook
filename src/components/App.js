@@ -1,8 +1,5 @@
 import React from "react";
 // import { connect } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../redux/phonebook/contacts-action.js";
-import { getFilterContacts } from "../redux/phonebook/contacts-selector";
 
 import ContactForm from "./ContactForm";
 import ContactsList from "./ContactsList";
@@ -11,36 +8,14 @@ import Filter from "./Filter";
 import "./App.scss";
 
 const App = () => {
-  const items = useSelector(getFilterContacts);
-  const dispatch = useDispatch();
-
-  const addItem = (newItem) => dispatch(actions.addItem(newItem));
-  const deleteItem = (id) => dispatch(actions.deleteItem(id));
-
-  const addContact = (newItem) => {
-    if (checkDoubleName(newItem)) {
-      alert(`${newItem.name} уже есть в контактах.`);
-      return false;
-    }
-
-    addItem(newItem);
-  };
-
-  const checkDoubleName = (newContact) => {
-    const { name } = newContact;
-    const normalizedName = name.toLowerCase();
-
-    return items.some(({ name }) => name.toLowerCase() === normalizedName);
-  };
-
   return (
     <Section>
       <h1 className="caption">Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
+      <ContactForm />
 
       <h2 className="title">Contacts</h2>
       <Filter />
-      <ContactsList contacts={items} onDelete={deleteItem} />
+      <ContactsList />
     </Section>
   );
 };

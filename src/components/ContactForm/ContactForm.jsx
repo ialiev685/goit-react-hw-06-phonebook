@@ -1,9 +1,32 @@
 import { useState } from "react";
 import "./ContactForm.scss";
 
-const ContactForm = ({ onSubmit }) => {
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../../redux/phonebook/contacts-action";
+import { getFilterContacts } from "../../redux/phonebook/contacts-selector";
+
+const ContactForm = () => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+
+  const items = useSelector(getFilterContacts);
+  const dispatch = useDispatch();
+
+  const addContact = (newItem) => {
+    if (checkDoubleName(newItem)) {
+      alert(`${newItem.name} уже есть в контактах.`);
+      return false;
+    }
+
+    dispatch(actions.addItem(newItem));
+  };
+
+  const checkDoubleName = (newContact) => {
+    const { name } = newContact;
+    const normalizedName = name.toLowerCase();
+
+    return items.some(({ name }) => name.toLowerCase() === normalizedName);
+  };
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -24,7 +47,7 @@ const ContactForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onSubmit({ name, number });
+    addContact({ name, number });
     setName("");
     setNumber("");
   };
